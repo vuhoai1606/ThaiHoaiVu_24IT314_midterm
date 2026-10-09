@@ -289,15 +289,21 @@ void display_entries(FileEntry **entries, size_t count, const Options *opts, boo
                     printf("%*s ", max_size_len, szbuf);
                 }
 
-                /* Date & Time */
+                /* Date & Time: NetBSD/POSIX 6-month rule */
                 time_t t = get_selected_time(&e->st, opts);
                 struct tm *lt = localtime(&t);
                 char time_buf[32];
                 if (lt) {
                     char mon_buf[16];
                     strftime(mon_buf, sizeof(mon_buf), "%b", lt);
-                    snprintf(time_buf, sizeof(time_buf), "%s %2d %02d:%02d",
-                             mon_buf, lt->tm_mday, lt->tm_hour, lt->tm_min);
+                    time_t now = time(NULL);
+                    if (t > now + 3600 || t < now - 15778476L) {
+                        snprintf(time_buf, sizeof(time_buf), "%s %2d  %4d",
+                                 mon_buf, lt->tm_mday, lt->tm_year + 1900);
+                    } else {
+                        snprintf(time_buf, sizeof(time_buf), "%s %2d %02d:%02d",
+                                 mon_buf, lt->tm_mday, lt->tm_hour, lt->tm_min);
+                    }
                 } else {
                     snprintf(time_buf, sizeof(time_buf), "Unknown Date");
                 }

@@ -12,8 +12,18 @@ void init_options(Options *opts) {
     opts->blocksize = 512;
     char *env_bs = getenv("BLOCKSIZE");
     if (env_bs != NULL && *env_bs != '\0') {
-        long bs = strtol(env_bs, NULL, 10);
-        if (bs > 0) {
+        char *endptr = NULL;
+        long bs = strtol(env_bs, &endptr, 10);
+        if (endptr && *endptr != '\0') {
+            if (*endptr == 'k' || *endptr == 'K') {
+                bs *= 1024;
+            } else if (*endptr == 'm' || *endptr == 'M') {
+                bs *= 1024 * 1024;
+            } else if (*endptr == 'g' || *endptr == 'G') {
+                bs *= 1024 * 1024 * 1024;
+            }
+        }
+        if (bs >= 512) {
             opts->blocksize = bs;
         }
     }

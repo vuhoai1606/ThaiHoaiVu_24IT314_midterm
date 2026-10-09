@@ -1,8 +1,8 @@
 # BÁO CÁO BÀI TẬP GIỮA KỲ: HIỆN THỰC LỆNH LS(1)
-**Môn học:** Lập trình hệ thống (System Programming)  
+**Môn học:** Lập trình hệ thống
 **Sinh viên:** Thái Hoài Vũ  
 **Mã số sinh viên (MSSV):** 24IT314  
-**GitHub Repository:** `https://github.com/<your-username>/ThaiHoaiVu_24IT314_midterm`
+**GitHub Repository:** `https://github.com/vuhoai1606/ThaiHoaiVu_24IT314_midterm`
 
 ---
 

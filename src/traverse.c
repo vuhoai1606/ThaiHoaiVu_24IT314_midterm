@@ -141,7 +141,23 @@ int process_operands(char *operands[], int operand_count, const Options *opts) {
             continue;
         }
 
-        if (S_ISDIR(fe->st.st_mode) && !opts->opt_d) {
+        bool is_dir = false;
+        if (!opts->opt_d) {
+            size_t oplen = strlen(op);
+            bool trailing_slash = (oplen > 0 && op[oplen - 1] == '/');
+            bool follow_symlink = trailing_slash || (!opts->opt_l && !opts->opt_n && !opts->opt_F);
+
+            if (follow_symlink) {
+                struct stat target_st;
+                if (stat(op, &target_st) == 0 && S_ISDIR(target_st.st_mode)) {
+                    is_dir = true;
+                }
+            } else if (S_ISDIR(fe->st.st_mode)) {
+                is_dir = true;
+            }
+        }
+
+        if (is_dir) {
             if (dir_count >= dir_cap) {
                 dir_cap *= 2;
                 dir_entries = realloc(dir_entries, dir_cap * sizeof(FileEntry *));
