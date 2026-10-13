@@ -27,4 +27,12 @@ else
 	rm -f $(OBJS) $(TARGET) $(TARGET).exe
 endif
 
-.PHONY: all clean
+test: $(TARGET)
+ifeq ($(OS),Windows_NT)
+	@sh test_suite.sh || bash test_suite.sh
+else
+	@chmod +x test_suite.sh
+	@./test_suite.sh
+endif
+
+.PHONY: all clean test
